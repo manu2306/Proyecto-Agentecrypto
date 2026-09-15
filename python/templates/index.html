@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agente Bitcoin</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .layout {
+            display: flex;
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+        .panel {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 0.85em;
+            color: #555;
+            flex: 1;
+            line-height: 1.4;
+        }
+        .panel h3 {
+            margin-top: 0;
+            font-size: 1em;
+            color: #333;
+        }
+        .centro {
+            flex: 2;
+        }
+        h1 { text-align: center; margin-top: 0; }
+        .chat { background: white; border-radius: 10px; padding: 20px; min-height: 300px; }
+        .mensaje { margin: 10px 0; padding: 10px 15px; border-radius: 15px; max-width: 80%; }
+        .vos { background: #d1e7ff; margin-left: auto; text-align: right; }
+        .bot { background: #e8e8e8; margin-right: auto; }
+
+        .barras { margin-top: 8px; }
+        .barra-fila { display: flex; align-items: center; font-size: 0.75em; margin: 3px 0; }
+        .barra-etiqueta { width: 70px; text-transform: capitalize; }
+        .barra-fondo { flex: 1; display: block; background: #ccc; border-radius: 5px; overflow: hidden; height: 10px; margin: 0 6px; }
+        .barra-relleno { display: block; height: 100%; background: #2b7de9; }
+        .barra-porcentaje { width: 35px; text-align: right; }
+
+        .ejemplos { margin-bottom: 10px; }
+        .ejemplos button {
+            font-size: 0.75em;
+            margin: 2px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            border: 1px solid #2b7de9;
+            background: white;
+            color: #2b7de9;
+            cursor: pointer;
+        }
+        .ejemplos button:hover { background: #2b7de9; color: white; }
+
+        form.chat-form { display: flex; margin-top: 10px; }
+        input[type=text] { flex: 1; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        button.enviar { padding: 10px 20px; margin-left: 10px; border: none; background: #2b7de9; color: white; border-radius: 5px; cursor: pointer; }
+
+        .reiniciar { text-align: right; margin-top: 10px; }
+        .reiniciar button { background: none; border: none; color: #999; font-size: 0.8em; cursor: pointer; text-decoration: underline; }
+
+        footer { text-align: center; font-size: 0.75em; color: #999; margin-top: 20px; }
+        @media (max-width: 800px) {
+            .layout { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <div class="panel">
+            <h3>ℹ️ Sobre este proyecto</h3>
+            <p>Este es un proyecto educativo que busca demostrar experiencia practica con Machine Learning: entrenar un modelo pequeño que relacione noticias de Bitcoin con posibles movimientos de precio.</p>
+            <p>No es un producto real ni una herramienta de trading.</p>
+        </div>
+
+        <div class="centro">
+            <h1>Agente Bitcoin</h1>
+
+            <div class="chat">
+                {% for m in conversacion %}
+                    <div class="mensaje {{ m.autor }}">
+                        {{ m.texto }}
+                        {% if m.probabilidades %}
+                            <div class="barras">
+                                {% for p in m.probabilidades %}
+                                    <div class="barra-fila">
+                                        <span class="barra-etiqueta">{{ p.categoria }}</span>
+                                        <span class="barra-fondo">
+                                            <span class="barra-relleno" style="width: {{ p.porcentaje }}%;"></span>
+                                        </span>
+                                        <span class="barra-porcentaje">{{ p.porcentaje }}%</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="ejemplos">
+                {% for ejemplo in ejemplos %}
+                    <button type="button" onclick="usarEjemplo('{{ ejemplo }}')">{{ ejemplo[:30] }}...</button>
+                {% endfor %}
+            </div>
+
+            <form class="chat-form" method="POST" id="formulario">
+                <input type="text" name="titular" id="campo-titular" placeholder="Escribi un titular de noticia sobre Bitcoin (en ingles)..." autofocus>
+                <button class="enviar" type="submit">Enviar</button>
+            </form>
+
+            <div class="reiniciar">
+                <form method="POST" action="{{ url_for('reiniciar') }}">
+                    <button type="submit">Reiniciar conversacion</button>
+                </form>
+            </div>
+
+            <p style="font-size:0.8em; color:#888; text-align:center; margin-top:15px;">⚠️ Este es un proyecto educativo. No es asesoramiento financiero real.</p>
+        </div>
+
+        <div class="panel">
+            <h3>🌐 ¿Por que en ingles?</h3>
+            <p>El modelo fue entrenado con noticias reales de fuentes en ingles (The Guardian, Finnhub, AlphaVantage).</p>
+            <p>Por eso, para que la prediccion tenga sentido, el titular que escribas tambien debe estar en ingles.</p>
+        </div>
+    </div>
+
+    <footer>Proyecto realizado por Manuel Corzo</footer>
+
+    <script>
+        function usarEjemplo(texto) {
+            document.getElementById('campo-titular').value = texto;
+            document.getElementById('formulario').submit();
+        }
+    </script>
+</body>
+</html>
