@@ -23,6 +23,7 @@ Proyecto universitario de "vibe coding": un modelo de Machine Learning entrenado
 
 ## Estructura del proyecto
 
+
 Agentecrypto/
 ├── data/ # Datos descargados y generados
 ├── python/
