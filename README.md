@@ -41,8 +41,7 @@ Agentecrypto/
 ## Cómo correrlo en tu computadora
 
 1. Cloná el repositorio:
-git clone https://github.com/manu2306/Agentecrypto.git
-cd Agentecrypto
+git clone https://github.com/manu2306/Proyecto-Agentecrypto.git
 
 2. Creá y activá un entorno virtual:
 python -m venv venv
