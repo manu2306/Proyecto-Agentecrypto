@@ -67,4 +67,4 @@ El modelo entrenado alcanza un accuracy de entrenamiento (validación) de aproxi
 
 ## Autor
 
-Manu — proyecto realizado para la facultad usando vibe coding.
+Manuel Corzo
